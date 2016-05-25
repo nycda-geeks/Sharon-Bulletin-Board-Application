@@ -3,6 +3,9 @@
 var pg = require('pg');
 var express = require('express')
 var app = express()
+var bodyParser = require('body-parser')
+var fs = require('fs')
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.set('views', './src/views');
 app.set('view engine', 'jade')
@@ -10,16 +13,17 @@ app.set('view engine', 'jade')
 app.use(express.static('./public/js'))
 app.use(express.static('./public/css'))
 
-var connectionString = "postgres://" + process.env.POSTGRES_USER + ":" + process.env.POSTGRES_PASSWORD + "@localhost/bulletinboard";
-
 app.get('/', function(req, res){
 	res.render('index')
 } );
+
+var connectionString = "postgres://" + process.env.POSTGRES_USER + ":" + process.env.POSTGRES_PASSWORD + "@localhost/bulletinboard";
 
 app.post('/submit', function(req, res){
 
 	var inputTitle = req.body.titleSubject;
 	var inputBody = req.body.bodyMessage;
+
 	pg.connect(connectionString, function (err, client, done) {
 		if (err) {
 			if (client) {
@@ -34,31 +38,39 @@ app.post('/submit', function(req, res){
 			} else {
 				done();
 			}
-			console.log(result.rows);
-			
+			console.log(inputTitle + " " + inputBody);
+
+		});
+		pg.end();
+	});
+});
+
+
+app.get('/messages', function(req,res){
+	var berichten = [];
+	pg.connect(connectionString, function (err, client, done) {
+		if (err) {
+			if (client) {
+				done(client);
+			}
+			return;
+		}
+		client.query('select * from messages', function (err, result) {
+			if (err) {
+				done(client);
+				return;
+			} else {
+				done();
+			}
+			berichten.push(result.rows)
+			console.log(berichten);
 		});
 	});
+
+	res.render('messages', {muchText: berichten})
 });
 
 
+app.listen(3000);
 
 
-
-pg.connect(connectionString, function (err, client, done) {
-	if (err) {
-		if (client) {
-			done(client);
-		}
-		return;
-	}
-	client.query('select * from hats', function (err, result) {
-		if (err) {
-			done(client);
-			return;
-		} else {
-			done();
-		}
-		console.log(result.rows);
-		
-	});
-});
