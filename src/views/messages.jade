@@ -5,7 +5,7 @@ block content
 	h2 Thank you for all these messages!
 
 	each message in messages
-		p Message #{message.id}
-		p #{message.title} 
+		p.messageNr Message #{message.id}
+		p.messageTitle #{message.title} 
 		p #{message.body}
 		br

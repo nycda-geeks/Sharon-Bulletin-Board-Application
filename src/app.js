@@ -32,17 +32,16 @@ app.post('/submit', function(req, res){
 			return;
 		}
 		client.query('insert into messages (title, body) values ($1, $2)', [inputTitle, inputBody], function (err, result) {
+			console.log(inputTitle + " " + inputBody);
 			if (err) {
 				done(client);
 				return;
 			} else {
 				done();
 			}
-			console.log(inputTitle + " " + inputBody);
-
 		});
-		pg.end();
 	});
+	res.redirect('/messages')
 });
 
 
@@ -67,6 +66,27 @@ app.get('/messages', function(req,res){
 		});
 	});	
 });
+
+app.get('/delete', function(req,res){
+	pg.connect(connectionString, function (err, client, done) {
+		if (err) {
+			if (client) {
+				done(client);
+			}
+			return;
+		}
+		client.query('select * from messages', function (err, result) {
+			var messageTables = result.rows
+			if (err) {
+				done(client);
+				return;
+			} else {
+				done();
+				res.send(messageTables)
+			}
+		});
+	});	
+})
 
 
 app.listen(3000);
