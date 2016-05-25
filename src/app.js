@@ -47,7 +47,6 @@ app.post('/submit', function(req, res){
 
 
 app.get('/messages', function(req,res){
-	var berichten = [];
 	pg.connect(connectionString, function (err, client, done) {
 		if (err) {
 			if (client) {
@@ -56,18 +55,17 @@ app.get('/messages', function(req,res){
 			return;
 		}
 		client.query('select * from messages', function (err, result) {
+			var messageTables = result.rows
+			console.log(messageTables);
 			if (err) {
 				done(client);
 				return;
 			} else {
 				done();
+				res.render('messages', {messages: messageTables})
 			}
-			berichten.push(result.rows)
-			console.log(berichten);
 		});
-	});
-
-	res.render('messages', {muchText: berichten})
+	});	
 });
 
 
