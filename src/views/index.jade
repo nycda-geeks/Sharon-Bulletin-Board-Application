@@ -1,0 +1,15 @@
+extends layout
+
+block content
+
+    h2 Write your message!
+
+    form(name="messageForm", action="/submit", method="post")
+        div.input
+            span.label Subject  
+            input(type="text", name="titleSubject")
+        div.input
+            span.label Message  
+            input(type="text", name="bodyMessage")
+        div.actions
+            input#button(type="submit", value="Submit")

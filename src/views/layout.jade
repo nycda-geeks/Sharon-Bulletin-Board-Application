@@ -1,0 +1,14 @@
+doctype html
+html
+	head
+		title= title
+		link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat' type='text/css')
+		link(rel='stylesheet', href='style.css', type='text/css')
+		script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js")
+
+	body
+		#navbar-fixed
+			a(href='/') New message 
+			a(href='http://localhost:3000/messages') Messages
+	#content
+		block content
