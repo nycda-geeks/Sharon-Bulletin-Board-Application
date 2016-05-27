@@ -1,0 +1,13 @@
+extends layout
+
+block content
+
+	h2 Delete message
+
+	form(name="messageForm", action="/deleting", method="post")
+		div.input
+			span.label Select message:   
+			input#deletelist(type="text", name="userinput")
+		div#allMessages
+		div.actions
+			input#button(type="submit", value="Delete")

@@ -22,6 +22,12 @@ a {
 	color:white;
 	margin-right:2em;
 }
+a:hover {
+	color:yellow;
+}
+a:active {
+	color:yellow;
+}
 
 #content {
 	margin:0 10%;
